@@ -28,31 +28,32 @@ body {
     position: relative;
 }
 
-/* TITLE BIGGER */
+/* TITLE MUCH BIGGER */
 h1 {
-    font-weight: 700;
-    font-size: 52px;
-    margin-bottom: 48px;
+    font-weight: 800;
+    font-size: 72px;
+    line-height: 1.15;
+    margin-bottom: 60px;
     color: #d6336c;
 }
 
 /* BIGGER BUTTON AREA */
 .buttons {
     position: relative;
-    height: 220px;
-    width: 560px;
+    height: 260px;
+    width: 700px;
     margin: 0 auto;
 }
 
-/* BIGGER BUTTONS */
+/* HUGE BUTTONS */
 button {
     border: none;
-    padding: 26px 48px;
+    padding: 32px 60px;
     border-radius: 999px;
-    font-size: 28px;
+    font-size: 36px;
     cursor: pointer;
     transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s;
-    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.1);
     white-space: nowrap;
 }
 
@@ -63,7 +64,7 @@ button:hover {
 #yesBtn {
     background: #ff6b9a;
     color: white;
-    margin-right: 20px;
+    margin-right: 24px;
     transform-origin: center;
 }
 
@@ -75,15 +76,15 @@ button:hover {
     position: absolute;
     background: #ffd3e0;
     color: #b03060;
-    left: 200px;
-    top: 60px;
+    left: 260px;
+    top: 80px;
 }
 
-/* BIGGER SUCCESS TEXT */
+/* SUCCESS TEXT BIGGER */
 #success {
-    margin-top: 20px;
-    font-size: 34px;
-    font-weight: 600;
+    margin-top: 28px;
+    font-size: 42px;
+    font-weight: 700;
     color: #e0316a;
     opacity: 0;
     transform: scale(0.8);
@@ -97,32 +98,35 @@ button:hover {
 
 .heart, .eagle {
     position: absolute;
-    font-size: 32px;
+    font-size: 40px;
     animation: floatUp 2.5s ease forwards;
     pointer-events: none;
 }
 
 .eagle {
-    font-size: 36px;
+    font-size: 46px;
     animation: burstUp 2.2s ease forwards;
 }
 
 @keyframes floatUp {
     0% { opacity: 1; transform: translateY(0) scale(1); }
-    100% { opacity: 0; transform: translateY(-160px) scale(1.4); }
+    100% { opacity: 0; transform: translateY(-180px) scale(1.5); }
 }
 
 @keyframes burstUp {
     0%   { opacity: 0; transform: translate(0, 0) scale(0.9) rotate(0deg); }
     15%  { opacity: 1; }
-    100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.6) rotate(var(--rot)); }
+    100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.8) rotate(var(--rot)); }
 }
 </style>
 </head>
 
 <body>
 <div class="container">
-    <h1>La Fripouille, will you be my valentine?</h1>
+    <h1>
+        La Fripouille,<br>
+        will you be my valentine ?
+    </h1>
 
     <div class="buttons" id="buttonArea">
         <button id="yesBtn">OUI</button>
@@ -151,7 +155,7 @@ let yesScale = 1;
 
 /* YES BUTTON GROWS + MORE PINK */
 function growYes() {
-  yesScale = Math.min(2.2, yesScale + 0.08);
+  yesScale = Math.min(2.4, yesScale + 0.1);
   yesBtn.style.transform = `scale(${yesScale})`;
 
   const colors = [
@@ -166,19 +170,18 @@ function growYes() {
   const index = Math.min(colors.length - 1, Math.floor(yesScale * 2));
   yesBtn.style.background = colors[index];
 
-  /* Background devient légèrement plus rose aussi */
   document.body.style.background =
     `linear-gradient(135deg, #ffd6e5, #fff0f6)`;
 }
 
 /* HEARTS */
-function createHearts(count = 12) {
+function createHearts(count = 14) {
   for (let i = 0; i < count; i++) {
     const heart = document.createElement("div");
     heart.className = "heart";
     heart.innerText = "💗";
 
-    heart.style.left = (window.innerWidth/2 + (Math.random()*140-70)) + "px";
+    heart.style.left = (window.innerWidth/2 + (Math.random()*160-80)) + "px";
     heart.style.top = (window.innerHeight/2 + 40) + "px";
 
     document.body.appendChild(heart);
@@ -187,7 +190,7 @@ function createHearts(count = 12) {
 }
 
 /* EAGLE EXPLOSION */
-function eagleExplosion(count = 20) {
+function eagleExplosion(count = 24) {
   const cx = window.innerWidth / 2;
   const cy = window.innerHeight / 2;
 
@@ -199,8 +202,8 @@ function eagleExplosion(count = 20) {
     e.style.left = (cx + (Math.random()*60-30)) + "px";
     e.style.top  = (cy + 10) + "px";
 
-    const dx = (Math.random()*420 - 210) + "px";
-    const dy = (Math.random()*-360 - 60) + "px";
+    const dx = (Math.random()*520 - 260) + "px";
+    const dy = (Math.random()*-420 - 80) + "px";
     const rot = (Math.random()*260 - 130) + "deg";
 
     e.style.setProperty("--dx", dx);
@@ -228,7 +231,7 @@ document.addEventListener("mousemove", (e) => {
   const distanceY = e.clientY - (rect.top + rect.height/2);
 
   const distance = Math.sqrt(distanceX*distanceX + distanceY*distanceY);
-  const triggerDistance = 110;
+  const triggerDistance = 120;
 
   if (distance < triggerDistance) {
 

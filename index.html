@@ -20,7 +20,14 @@ body {
     justify-content: center;
     overflow: hidden;
     color: #333;
+    animation: fadeIn 1s ease;
     transition: background 0.6s ease;
+}
+
+/* FADE IN PAGE */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .container {
@@ -28,14 +35,20 @@ body {
     position: relative;
 }
 
-/* IMAGE AU DESSUS — 2x bigger */
+/* FLOATING IMAGE */
 .top-image {
     width: 440px;
     margin-bottom: 20px;
     filter: drop-shadow(0 12px 24px rgba(0,0,0,0.18));
+    animation: float 4s ease-in-out infinite;
 }
 
-/* TITLE */
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+}
+
 h1 {
     font-weight: 800;
     font-size: 72px;
@@ -44,7 +57,6 @@ h1 {
     color: #d6336c;
 }
 
-/* BUTTON AREA */
 .buttons {
     position: relative;
     height: 260px;
@@ -52,7 +64,6 @@ h1 {
     margin: 0 auto;
 }
 
-/* BUTTONS */
 button {
     border: none;
     padding: 32px 60px;
@@ -61,22 +72,12 @@ button {
     cursor: pointer;
     transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s;
     box-shadow: 0 8px 18px rgba(0,0,0,0.1);
-    white-space: nowrap;
 }
 
-button:hover {
-    transform: translateY(-2px);
-}
-
+/* YES BUTTON (with dynamic glow) */
 #yesBtn {
     background: #ff6b9a;
     color: white;
-    margin-right: 24px;
-    transform-origin: center;
-}
-
-#yesBtn:hover {
-    background: #ff4f86;
 }
 
 #noBtn {
@@ -87,7 +88,6 @@ button:hover {
     top: 80px;
 }
 
-/* SUCCESS TEXT (2 lines, centered) */
 #success {
     margin-top: 28px;
     font-size: 42px;
@@ -96,7 +96,6 @@ button:hover {
     opacity: 0;
     transform: scale(0.8);
     transition: all 0.5s ease;
-    text-align: center;
     line-height: 1.2;
 }
 
@@ -105,22 +104,36 @@ button:hover {
     transform: scale(1);
 }
 
-/* IMAGE THAT APPEARS AFTER YES */
 #successImg {
     margin-top: 18px;
     width: 320px;
     opacity: 0;
-    transform: translateY(8px) scale(0.98);
+    transform: translateY(8px);
     transition: all 0.55s ease;
     display: block;
     margin-left: auto;
     margin-right: auto;
-    filter: drop-shadow(0 12px 24px rgba(0,0,0,0.18));
 }
 
 #successImg.show {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
+}
+
+/* SUBTLE RATS AROUND SUCCESS TEXT */
+.rat {
+    position: absolute;
+    font-size: 30px;
+    opacity: 0;
+    animation: ratPop 2.2s ease forwards;
+    pointer-events: none;
+    filter: drop-shadow(0 10px 18px rgba(0,0,0,0.12));
+}
+
+@keyframes ratPop {
+    0%   { opacity: 0; transform: translateY(8px) scale(0.7) rotate(-6deg); }
+    20%  { opacity: 0.9; }
+    100% { opacity: 0; transform: translateY(-18px) scale(1.15) rotate(6deg); }
 }
 
 .heart, .eagle {
@@ -137,13 +150,13 @@ button:hover {
 
 @keyframes floatUp {
     0% { opacity: 1; transform: translateY(0) scale(1); }
-    100% { opacity: 0; transform: translateY(-180px) scale(1.5); }
+    100% { opacity: 0; transform: translateY(-200px) scale(1.6); }
 }
 
 @keyframes burstUp {
-    0%   { opacity: 0; transform: translate(0, 0) scale(0.9) rotate(0deg); }
+    0%   { opacity: 0; transform: translate(0,0) scale(0.9); }
     15%  { opacity: 1; }
-    100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.8) rotate(var(--rot)); }
+    100% { opacity: 0; transform: translate(var(--dx),var(--dy)) scale(1.8); }
 }
 </style>
 </head>
@@ -151,28 +164,25 @@ button:hover {
 <body>
 <div class="container">
 
-    <!-- TOP IMAGE -->
-    <img src="image.png" class="top-image" alt="Fripouille">
+<img src="image.png" class="top-image" alt="Fripouille">
 
-    <h1>
-        La Fripouille,<br>
-        will you be my valentine ?
-    </h1>
+<h1>
+La Fripouille,<br>
+will you be my valentine ?
+</h1>
 
-    <div class="buttons" id="buttonArea">
-        <button id="yesBtn">OUI</button>
-        <button id="noBtn">non</button>
-    </div>
+<div class="buttons" id="buttonArea">
+<button id="yesBtn">OUI</button>
+<button id="noBtn">non</button>
+</div>
 
-    <!-- SUCCESS TEXT (2 lines) -->
-    <div id="success">
-        Bonne pioche,<br>
-        Plus que 18 jours avant de se voir 🐀
-    </div>
+<div id="success">
+Bonne pioche !<br>
+Plus que 18 jours avant de se voir 🐀
+</div>
 
-    <!-- SUCCESS IMAGE (appears after YES click) -->
-    <!-- Change success.png to your file name / path -->
-    <img id="successImg" src="success.png" alt="surprise">
+<img id="successImg" src="success.png" alt="surprise">
+
 </div>
 
 <script>
@@ -192,80 +202,118 @@ const noTexts = [
 
 let noIndex = 0;
 let yesScale = 1;
+let resistance = 0; // drives background + glow intensity
 
-/* YES BUTTON GROWS + MORE PINK */
+function lerp(a, b, t) { return a + (b - a) * t; }
+function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+/* YES BUTTON GROWS + MORE PINK + GLOW */
 function growYes() {
-  yesScale = Math.min(2.4, yesScale + 0.1);
+  yesScale = Math.min(2.6, yesScale + 0.1);
   yesBtn.style.transform = `scale(${yesScale})`;
 
-  const colors = [
-    "#ff6b9a",
-    "#ff5c92",
-    "#ff4f86",
-    "#ff3f7b",
-    "#ff2f70",
-    "#ff1f66"
-  ];
+  // background becomes more pink as resistance grows
+  resistance = clamp(resistance + 0.08, 0, 1);
 
-  const index = Math.min(colors.length - 1, Math.floor(yesScale * 2));
-  yesBtn.style.background = colors[index];
+  const c1 = "#ffe6ef";
+  const c2 = "#fff5f8";
+  const c3 = "#ffd0e2";
+  const c4 = "#ffe9f3";
 
-  document.body.style.background =
-    `linear-gradient(135deg, #ffd6e5, #fff0f6)`;
+  // swap to a stronger gradient progressively
+  const t = resistance;
+  document.body.style.background = `linear-gradient(135deg, ${t < 0.5 ? c1 : c3}, ${t < 0.5 ? c2 : c4})`;
+
+  // button color progression + glow
+  const colors = ["#ff6b9a","#ff5c92","#ff4f86","#ff3f7b","#ff2f70","#ff1f66"];
+  const idx = Math.min(colors.length - 1, Math.floor(yesScale * 2));
+  yesBtn.style.background = colors[idx];
+
+  const glow = lerp(0.15, 0.45, t);
+  const blur = lerp(16, 46, t);
+  yesBtn.style.boxShadow = `0 10px 22px rgba(0,0,0,0.12), 0 0 ${blur}px rgba(255, 47, 112, ${glow})`;
 }
 
-/* HEARTS — WIDER */
-function createHearts(count = 18) {
+/* HEARTS — FROM YES BUTTON */
+function createHearts(originX, originY, count = 20) {
   for (let i = 0; i < count; i++) {
     const heart = document.createElement("div");
     heart.className = "heart";
     heart.innerText = "💗";
 
-    heart.style.left = (window.innerWidth/2 + (Math.random()*400-200)) + "px";
-    heart.style.top  = (window.innerHeight/2 + (Math.random()*120-40)) + "px";
+    // wider initial spread
+    const startX = originX + (Math.random()*220 - 110);
+    const startY = originY + (Math.random()*80 - 20);
+
+    heart.style.left = startX + "px";
+    heart.style.top  = startY + "px";
 
     document.body.appendChild(heart);
     setTimeout(() => heart.remove(), 2500);
   }
 }
 
-/* EAGLE EXPLOSION — MUCH WIDER */
-function eagleExplosion(count = 32) {
-  const cx = window.innerWidth / 2;
-  const cy = window.innerHeight / 2;
-
+/* EAGLE EXPLOSION — WIDE + FROM YES BUTTON */
+function eagleExplosion(originX, originY, count = 34) {
   for (let i = 0; i < count; i++) {
     const e = document.createElement("div");
     e.className = "eagle";
     e.innerText = "🦅";
 
-    e.style.left = (cx + (Math.random()*160-80)) + "px";
-    e.style.top  = (cy + 10) + "px";
+    // wider starting area
+    e.style.left = (originX + (Math.random()*160 - 80)) + "px";
+    e.style.top  = (originY + 10) + "px";
 
-    const dx = (Math.random()*900 - 450) + "px";
-    const dy = (Math.random()*-700 - 120) + "px";
-    const rot = (Math.random()*360 - 180) + "deg";
+    // MUCH wider burst distance
+    const dx = (Math.random()*1000 - 500) + "px";
+    const dy = (Math.random()*-760 - 140) + "px";
 
     e.style.setProperty("--dx", dx);
     e.style.setProperty("--dy", dy);
-    e.style.setProperty("--rot", rot);
 
     document.body.appendChild(e);
     setTimeout(() => e.remove(), 2300);
   }
 }
 
+/* SUBTLE RATS around the success text */
+function ratSprinkles(count = 8) {
+  const rect = success.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  for (let i = 0; i < count; i++) {
+    const r = document.createElement("div");
+    r.className = "rat";
+    r.innerText = "🐀";
+
+    const dx = (Math.random()*360 - 180);
+    const dy = (Math.random()*160 - 80);
+
+    r.style.left = (cx + dx) + "px";
+    r.style.top  = (cy + dy) + "px";
+
+    document.body.appendChild(r);
+    setTimeout(() => r.remove(), 2200);
+  }
+}
+
 /* YES CLICK */
 yesBtn.addEventListener("click", () => {
+  const rect = yesBtn.getBoundingClientRect();
+  const originX = rect.left + rect.width / 2;
+  const originY = rect.top;
+
   success.classList.add("show");
   successImg.classList.add("show");
-  createHearts();
-  eagleExplosion();
+
+  createHearts(originX, originY);
+  eagleExplosion(originX, originY);
+  ratSprinkles();
 });
 
 /* NO BUTTON ESCAPE */
 document.addEventListener("mousemove", (e) => {
-
   const rect = noBtn.getBoundingClientRect();
 
   const distanceX = e.clientX - (rect.left + rect.width/2);
@@ -275,7 +323,6 @@ document.addEventListener("mousemove", (e) => {
   const triggerDistance = 120;
 
   if (distance < triggerDistance) {
-
     noIndex = (noIndex + 1) % noTexts.length;
     noBtn.innerText = noTexts[noIndex];
 

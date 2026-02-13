@@ -28,7 +28,13 @@ body {
     position: relative;
 }
 
-/* TITLE MUCH BIGGER */
+/* IMAGE AU DESSUS */
+.top-image {
+    width: 220px;
+    margin-bottom: 20px;
+}
+
+/* TITLE */
 h1 {
     font-weight: 800;
     font-size: 72px;
@@ -37,7 +43,7 @@ h1 {
     color: #d6336c;
 }
 
-/* BIGGER BUTTON AREA */
+/* BUTTON AREA */
 .buttons {
     position: relative;
     height: 260px;
@@ -45,7 +51,7 @@ h1 {
     margin: 0 auto;
 }
 
-/* HUGE BUTTONS */
+/* BUTTONS */
 button {
     border: none;
     padding: 32px 60px;
@@ -80,7 +86,6 @@ button:hover {
     top: 80px;
 }
 
-/* SUCCESS TEXT BIGGER */
 #success {
     margin-top: 28px;
     font-size: 42px;
@@ -123,6 +128,10 @@ button:hover {
 
 <body>
 <div class="container">
+
+    <!-- IMAGE AJOUTÉE ICI -->
+    <img src="image.png" class="top-image" alt="Fripouille">
+
     <h1>
         La Fripouille,<br>
         will you be my valentine ?
@@ -153,7 +162,6 @@ const noTexts = [
 let noIndex = 0;
 let yesScale = 1;
 
-/* YES BUTTON GROWS + MORE PINK */
 function growYes() {
   yesScale = Math.min(2.4, yesScale + 0.1);
   yesBtn.style.transform = `scale(${yesScale})`;
@@ -174,7 +182,6 @@ function growYes() {
     `linear-gradient(135deg, #ffd6e5, #fff0f6)`;
 }
 
-/* HEARTS */
 function createHearts(count = 14) {
   for (let i = 0; i < count; i++) {
     const heart = document.createElement("div");
@@ -189,7 +196,6 @@ function createHearts(count = 14) {
   }
 }
 
-/* EAGLE EXPLOSION */
 function eagleExplosion(count = 24) {
   const cx = window.innerWidth / 2;
   const cy = window.innerHeight / 2;
@@ -215,14 +221,12 @@ function eagleExplosion(count = 24) {
   }
 }
 
-/* YES CLICK */
 yesBtn.addEventListener("click", () => {
   success.classList.add("show");
   createHearts();
   eagleExplosion();
 });
 
-/* NO BUTTON ESCAPE */
 document.addEventListener("mousemove", (e) => {
 
   const rect = noBtn.getBoundingClientRect();

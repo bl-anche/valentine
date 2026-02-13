@@ -21,7 +21,6 @@ body {
     overflow: hidden;
     color: #333;
     animation: fadeIn 1s ease;
-    transition: background 0.6s ease;
 }
 
 /* FADE IN PAGE */
@@ -74,7 +73,6 @@ button {
     box-shadow: 0 8px 18px rgba(0,0,0,0.1);
 }
 
-/* YES BUTTON (with dynamic glow) */
 #yesBtn {
     background: #ff6b9a;
     color: white;
@@ -96,7 +94,6 @@ button {
     opacity: 0;
     transform: scale(0.8);
     transition: all 0.5s ease;
-    line-height: 1.2;
 }
 
 #success.show {
@@ -118,22 +115,6 @@ button {
 #successImg.show {
     opacity: 1;
     transform: translateY(0);
-}
-
-/* SUBTLE RATS AROUND SUCCESS TEXT */
-.rat {
-    position: absolute;
-    font-size: 30px;
-    opacity: 0;
-    animation: ratPop 2.2s ease forwards;
-    pointer-events: none;
-    filter: drop-shadow(0 10px 18px rgba(0,0,0,0.12));
-}
-
-@keyframes ratPop {
-    0%   { opacity: 0; transform: translateY(8px) scale(0.7) rotate(-6deg); }
-    20%  { opacity: 0.9; }
-    100% { opacity: 0; transform: translateY(-18px) scale(1.15) rotate(6deg); }
 }
 
 .heart, .eagle {
@@ -164,7 +145,7 @@ button {
 <body>
 <div class="container">
 
-<img src="image.png" class="top-image" alt="Fripouille">
+<img src="image.png" class="top-image">
 
 <h1>
 La Fripouille,<br>
@@ -181,7 +162,7 @@ Bonne pioche !<br>
 Plus que 18 jours avant de se voir 🐀
 </div>
 
-<img id="successImg" src="success.png" alt="surprise">
+<img id="successImg" src="success.png">
 
 </div>
 
@@ -193,154 +174,89 @@ const successImg = document.getElementById("successImg");
 const buttonArea = document.getElementById("buttonArea");
 
 const noTexts = [
-  "non",
-  "je fais du jjb",
-  "mes lattes sont pas cassées",
-  "promis je rentre bientôt",
-  "dit oui"
+"non",
+"je fais du jjb",
+"mes lattes sont pas cassées",
+"promis je rentre bientôt",
+"dit oui"
 ];
 
 let noIndex = 0;
 let yesScale = 1;
-let resistance = 0; // drives background + glow intensity
 
-function lerp(a, b, t) { return a + (b - a) * t; }
-function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
-
-/* YES BUTTON GROWS + MORE PINK + GLOW */
 function growYes() {
-  yesScale = Math.min(2.6, yesScale + 0.1);
-  yesBtn.style.transform = `scale(${yesScale})`;
-
-  // background becomes more pink as resistance grows
-  resistance = clamp(resistance + 0.08, 0, 1);
-
-  const c1 = "#ffe6ef";
-  const c2 = "#fff5f8";
-  const c3 = "#ffd0e2";
-  const c4 = "#ffe9f3";
-
-  // swap to a stronger gradient progressively
-  const t = resistance;
-  document.body.style.background = `linear-gradient(135deg, ${t < 0.5 ? c1 : c3}, ${t < 0.5 ? c2 : c4})`;
-
-  // button color progression + glow
-  const colors = ["#ff6b9a","#ff5c92","#ff4f86","#ff3f7b","#ff2f70","#ff1f66"];
-  const idx = Math.min(colors.length - 1, Math.floor(yesScale * 2));
-  yesBtn.style.background = colors[idx];
-
-  const glow = lerp(0.15, 0.45, t);
-  const blur = lerp(16, 46, t);
-  yesBtn.style.boxShadow = `0 10px 22px rgba(0,0,0,0.12), 0 0 ${blur}px rgba(255, 47, 112, ${glow})`;
+yesScale = Math.min(2.4, yesScale + 0.1);
+yesBtn.style.transform = `scale(${yesScale})`;
 }
 
-/* HEARTS — FROM YES BUTTON */
-function createHearts(originX, originY, count = 20) {
-  for (let i = 0; i < count; i++) {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerText = "💗";
-
-    // wider initial spread
-    const startX = originX + (Math.random()*220 - 110);
-    const startY = originY + (Math.random()*80 - 20);
-
-    heart.style.left = startX + "px";
-    heart.style.top  = startY + "px";
-
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 2500);
-  }
+function createHearts(originX, originY, count = 18) {
+for (let i=0;i<count;i++){
+const heart=document.createElement("div");
+heart.className="heart";
+heart.innerText="💗";
+heart.style.left=originX+"px";
+heart.style.top=originY+"px";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),2500);
+}
 }
 
-/* EAGLE EXPLOSION — WIDE + FROM YES BUTTON */
-function eagleExplosion(originX, originY, count = 34) {
-  for (let i = 0; i < count; i++) {
-    const e = document.createElement("div");
-    e.className = "eagle";
-    e.innerText = "🦅";
+function eagleExplosion(originX,originY,count=32){
+for(let i=0;i<count;i++){
+const e=document.createElement("div");
+e.className="eagle";
+e.innerText="🦅";
 
-    // wider starting area
-    e.style.left = (originX + (Math.random()*160 - 80)) + "px";
-    e.style.top  = (originY + 10) + "px";
+e.style.left=originX+"px";
+e.style.top=originY+"px";
 
-    // MUCH wider burst distance
-    const dx = (Math.random()*1000 - 500) + "px";
-    const dy = (Math.random()*-760 - 140) + "px";
+const dx=(Math.random()*900-450)+"px";
+const dy=(Math.random()*-700-120)+"px";
 
-    e.style.setProperty("--dx", dx);
-    e.style.setProperty("--dy", dy);
+e.style.setProperty("--dx",dx);
+e.style.setProperty("--dy",dy);
 
-    document.body.appendChild(e);
-    setTimeout(() => e.remove(), 2300);
-  }
+document.body.appendChild(e);
+setTimeout(()=>e.remove(),2300);
+}
 }
 
-/* SUBTLE RATS around the success text */
-function ratSprinkles(count = 8) {
-  const rect = success.getBoundingClientRect();
-  const cx = rect.left + rect.width / 2;
-  const cy = rect.top + rect.height / 2;
+yesBtn.addEventListener("click",()=>{
+const rect=yesBtn.getBoundingClientRect();
+const originX=rect.left+rect.width/2;
+const originY=rect.top;
 
-  for (let i = 0; i < count; i++) {
-    const r = document.createElement("div");
-    r.className = "rat";
-    r.innerText = "🐀";
+success.classList.add("show");
+successImg.classList.add("show");
 
-    const dx = (Math.random()*360 - 180);
-    const dy = (Math.random()*160 - 80);
-
-    r.style.left = (cx + dx) + "px";
-    r.style.top  = (cy + dy) + "px";
-
-    document.body.appendChild(r);
-    setTimeout(() => r.remove(), 2200);
-  }
-}
-
-/* YES CLICK */
-yesBtn.addEventListener("click", () => {
-  const rect = yesBtn.getBoundingClientRect();
-  const originX = rect.left + rect.width / 2;
-  const originY = rect.top;
-
-  success.classList.add("show");
-  successImg.classList.add("show");
-
-  createHearts(originX, originY);
-  eagleExplosion(originX, originY);
-  ratSprinkles();
+createHearts(originX,originY);
+eagleExplosion(originX,originY);
 });
 
-/* NO BUTTON ESCAPE */
-document.addEventListener("mousemove", (e) => {
-  const rect = noBtn.getBoundingClientRect();
+document.addEventListener("mousemove",(e)=>{
+const rect=noBtn.getBoundingClientRect();
+const distanceX=e.clientX-(rect.left+rect.width/2);
+const distanceY=e.clientY-(rect.top+rect.height/2);
+const distance=Math.sqrt(distanceX*distanceX+distanceY*distanceY);
 
-  const distanceX = e.clientX - (rect.left + rect.width/2);
-  const distanceY = e.clientY - (rect.top + rect.height/2);
+if(distance<120){
+noIndex=(noIndex+1)%noTexts.length;
+noBtn.innerText=noTexts[noIndex];
+growYes();
 
-  const distance = Math.sqrt(distanceX*distanceX + distanceY*distanceY);
-  const triggerDistance = 120;
+let newLeft=noBtn.offsetLeft-distanceX*0.45;
+let newTop=noBtn.offsetTop-distanceY*0.45;
 
-  if (distance < triggerDistance) {
-    noIndex = (noIndex + 1) % noTexts.length;
-    noBtn.innerText = noTexts[noIndex];
+const areaRect=buttonArea.getBoundingClientRect();
+const maxX=areaRect.width-noBtn.offsetWidth;
+const maxY=areaRect.height-noBtn.offsetHeight;
 
-    growYes();
+newLeft=Math.max(0,Math.min(maxX,newLeft));
+newTop=Math.max(0,Math.min(maxY,newTop));
 
-    let newLeft = noBtn.offsetLeft - distanceX * 0.45;
-    let newTop  = noBtn.offsetTop - distanceY * 0.45;
-
-    const areaRect = buttonArea.getBoundingClientRect();
-    const maxX = areaRect.width - noBtn.offsetWidth;
-    const maxY = areaRect.height - noBtn.offsetHeight;
-
-    newLeft = Math.max(0, Math.min(maxX, newLeft));
-    newTop  = Math.max(0, Math.min(maxY, newTop));
-
-    noBtn.style.left = newLeft + "px";
-    noBtn.style.top = newTop + "px";
-  }
+noBtn.style.left=newLeft+"px";
+noBtn.style.top=newTop+"px";
+}
 });
 </script>
 </body>

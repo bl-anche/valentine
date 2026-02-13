@@ -28,7 +28,7 @@ body {
     position: relative;
 }
 
-/* IMAGE — TWICE BIGGER */
+/* IMAGE AU DESSUS — 2x bigger */
 .top-image {
     width: 440px;
     margin-bottom: 20px;
@@ -87,6 +87,7 @@ button:hover {
     top: 80px;
 }
 
+/* SUCCESS TEXT (2 lines, centered) */
 #success {
     margin-top: 28px;
     font-size: 42px;
@@ -95,11 +96,31 @@ button:hover {
     opacity: 0;
     transform: scale(0.8);
     transition: all 0.5s ease;
+    text-align: center;
+    line-height: 1.2;
 }
 
 #success.show {
     opacity: 1;
     transform: scale(1);
+}
+
+/* IMAGE THAT APPEARS AFTER YES */
+#successImg {
+    margin-top: 18px;
+    width: 320px;
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+    transition: all 0.55s ease;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    filter: drop-shadow(0 12px 24px rgba(0,0,0,0.18));
+}
+
+#successImg.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
 }
 
 .heart, .eagle {
@@ -130,7 +151,7 @@ button:hover {
 <body>
 <div class="container">
 
-    <!-- IMAGE -->
+    <!-- TOP IMAGE -->
     <img src="image.png" class="top-image" alt="Fripouille">
 
     <h1>
@@ -143,13 +164,22 @@ button:hover {
         <button id="noBtn">non</button>
     </div>
 
-    <div id="success">Bonne pioche, plus que 18 jours avant de se voir 🐀</div>
+    <!-- SUCCESS TEXT (2 lines) -->
+    <div id="success">
+        Bonne pioche,<br>
+        Plus que 18 jours avant de se voir 🐀
+    </div>
+
+    <!-- SUCCESS IMAGE (appears after YES click) -->
+    <!-- Change success.png to your file name / path -->
+    <img id="successImg" src="success.png" alt="surprise">
 </div>
 
 <script>
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const success = document.getElementById("success");
+const successImg = document.getElementById("successImg");
 const buttonArea = document.getElementById("buttonArea");
 
 const noTexts = [
@@ -224,6 +254,7 @@ function eagleExplosion(count = 24) {
 
 yesBtn.addEventListener("click", () => {
   success.classList.add("show");
+  successImg.classList.add("show");   // show the image after YES
   createHearts();
   eagleExplosion();
 });

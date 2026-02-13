@@ -5,139 +5,126 @@
 <title>La Fripouille, will you be my valentine?</title>
 
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: system-ui, -apple-system, sans-serif;
-    }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, sans-serif;
+}
 
-    body {
-        height: 100vh;
-        background: linear-gradient(135deg, #ffe6ef, #fff5f8);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        color: #333;
-    }
+body {
+    height: 100vh;
+    background: linear-gradient(135deg, #ffe6ef, #fff5f8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: #333;
+}
 
-    .container {
-        text-align: center;
-        position: relative;
-    }
+.container {
+    text-align: center;
+    position: relative;
+}
 
-    h1 {
-        font-weight: 600;
-        margin-bottom: 30px;
-        color: #d6336c;
-    }
+/* TITLE — FRIPOUILLE INCLUDED */
+h1 {
+    font-weight: 700;
+    font-size: 36px;
+    margin-bottom: 36px;
+    color: #d6336c;
+}
 
-    .buttons {
-        position: relative;
-        height: 120px;
-        width: 340px; /* helps keep space predictable */
-        margin: 0 auto;
-    }
+.buttons {
+    position: relative;
+    height: 160px;
+    width: 420px;
+    margin: 0 auto;
+}
 
-    button {
-        border: none;
-        padding: 14px 26px;
-        border-radius: 999px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s;
-        box-shadow: 0 6px 14px rgba(0,0,0,0.08);
-        white-space: nowrap;
-    }
+button {
+    border: none;
+    padding: 18px 34px;
+    border-radius: 999px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+    white-space: nowrap;
+}
 
-    button:hover {
-        transform: translateY(-2px);
-    }
+button:hover {
+    transform: translateY(-2px);
+}
 
-    #yesBtn {
-        background: #ff6b9a;
-        color: white;
-        margin-right: 20px;
-        transform-origin: center;
-    }
+#yesBtn {
+    background: #ff6b9a;
+    color: white;
+    margin-right: 20px;
+    transform-origin: center;
+}
 
-    #yesBtn:hover {
-        background: #ff4f86;
-    }
+#yesBtn:hover {
+    background: #ff4f86;
+}
 
-    #noBtn {
-        position: absolute;
-        background: #ffd3e0;
-        color: #b03060;
-        left: 160px;
-        top: 40px;
-    }
+#noBtn {
+    position: absolute;
+    background: #ffd3e0;
+    color: #b03060;
+    left: 160px;
+    top: 40px;
+}
 
-    #typing {
-        margin-top: 30px;
-        font-size: 18px;
-        color: #b03060;
-        opacity: 0;
-        transform: translateY(6px);
-        transition: all 0.35s ease;
-        min-height: 28px;
-    }
+#success {
+    margin-top: 14px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #e0316a;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.5s ease;
+}
 
-    #typing.show {
-        opacity: 1;
-        transform: translateY(0);
-    }
+#success.show {
+    opacity: 1;
+    transform: scale(1);
+}
 
-    #success {
-        margin-top: 14px;
-        font-size: 20px;
-        color: #e0316a;
-        opacity: 0;
-        transform: scale(0.8);
-        transition: all 0.5s ease;
-    }
+.heart, .eagle {
+    position: absolute;
+    font-size: 24px;
+    animation: floatUp 2.5s ease forwards;
+    pointer-events: none;
+}
 
-    #success.show {
-        opacity: 1;
-        transform: scale(1);
-    }
+.eagle {
+    font-size: 28px;
+    animation: burstUp 2.2s ease forwards;
+}
 
-    .heart, .eagle {
-        position: absolute;
-        font-size: 22px;
-        animation: floatUp 2.5s ease forwards;
-        pointer-events: none;
-    }
+@keyframes floatUp {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-160px) scale(1.4); }
+}
 
-    .eagle {
-        font-size: 26px;
-        animation: burstUp 2.2s ease forwards;
-    }
-
-    @keyframes floatUp {
-        0% { opacity: 1; transform: translateY(0) scale(1); }
-        100% { opacity: 0; transform: translateY(-160px) scale(1.4); }
-    }
-
-    @keyframes burstUp {
-        0%   { opacity: 0; transform: translate(0, 0) scale(0.9) rotate(0deg); }
-        15%  { opacity: 1; }
-        100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.6) rotate(var(--rot)); }
-    }
+@keyframes burstUp {
+    0%   { opacity: 0; transform: translate(0, 0) scale(0.9) rotate(0deg); }
+    15%  { opacity: 1; }
+    100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.6) rotate(var(--rot)); }
+}
 </style>
 </head>
 
 <body>
 <div class="container">
-    <h1>Will you be my Valentine?</h1>
+    <h1>La Fripouille, will you be my valentine?</h1>
 
     <div class="buttons" id="buttonArea">
         <button id="yesBtn">OUI</button>
         <button id="noBtn">non</button>
     </div>
 
-    <div id="typing">…</div>
     <div id="success">Bonne pioche, plus que 18 jours avant de se voir 🦅</div>
 </div>
 
@@ -145,10 +132,8 @@
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const success = document.getElementById("success");
-const typing = document.getElementById("typing");
 const buttonArea = document.getElementById("buttonArea");
 
-// ---------- NO button text cycle ----------
 const noTexts = [
   "tu es sur ?",
   "no",
@@ -157,42 +142,18 @@ const noTexts = [
   "no",
   "mes lattes sont pas cassées"
 ];
-let noIndex = 0;
 
-// ---------- YES button grows when NO escapes ----------
+let noIndex = 0;
 let yesScale = 1;
+
+/* YES BUTTON GROWS */
 function growYes() {
-  yesScale = Math.min(2.2, yesScale + 0.08); // cap so it doesn’t become a planet
+  yesScale = Math.min(2.2, yesScale + 0.08);
   yesBtn.style.transform = `scale(${yesScale})`;
 }
 
-// ---------- typing effect before success ----------
-let typingTimer = null;
-function showTypingThenSuccess() {
-  // reset states
-  success.classList.remove("show");
-  typing.classList.add("show");
-  typing.innerText = "";
-
-  const full = "typing… bon ok j’avoue 😳";
-  let i = 0;
-
-  if (typingTimer) clearInterval(typingTimer);
-
-  typingTimer = setInterval(() => {
-    typing.innerText = full.slice(0, i++);
-    if (i > full.length) {
-      clearInterval(typingTimer);
-      setTimeout(() => {
-        typing.classList.remove("show");
-        success.classList.add("show");
-      }, 350);
-    }
-  }, 45);
-}
-
-// ---------- hearts + eagle explosion ----------
-function createHearts(count = 10) {
+/* HEARTS */
+function createHearts(count = 12) {
   for (let i = 0; i < count; i++) {
     const heart = document.createElement("div");
     heart.className = "heart";
@@ -206,7 +167,8 @@ function createHearts(count = 10) {
   }
 }
 
-function eagleExplosion(count = 18) {
+/* EAGLE EXPLOSION */
+function eagleExplosion(count = 20) {
   const cx = window.innerWidth / 2;
   const cy = window.innerHeight / 2;
 
@@ -215,11 +177,9 @@ function eagleExplosion(count = 18) {
     e.className = "eagle";
     e.innerText = "🦅";
 
-    // start near center
     e.style.left = (cx + (Math.random()*60-30)) + "px";
     e.style.top  = (cy + 10) + "px";
 
-    // random burst vector
     const dx = (Math.random()*420 - 210) + "px";
     const dy = (Math.random()*-360 - 60) + "px";
     const rot = (Math.random()*260 - 130) + "deg";
@@ -233,15 +193,16 @@ function eagleExplosion(count = 18) {
   }
 }
 
-// ---------- YES click behavior ----------
+/* YES CLICK */
 yesBtn.addEventListener("click", () => {
-  showTypingThenSuccess();
-  createHearts(14);
-  eagleExplosion(22);
+  success.classList.add("show");
+  createHearts();
+  eagleExplosion();
 });
 
-// ---------- NO avoidance (with text swap + yes growth) ----------
+/* NO BUTTON ESCAPE */
 document.addEventListener("mousemove", (e) => {
+
   const rect = noBtn.getBoundingClientRect();
 
   const distanceX = e.clientX - (rect.left + rect.width/2);
@@ -251,14 +212,12 @@ document.addEventListener("mousemove", (e) => {
   const triggerDistance = 110;
 
   if (distance < triggerDistance) {
-    // change text each escape
+
     noIndex = (noIndex + 1) % noTexts.length;
     noBtn.innerText = noTexts[noIndex];
 
-    // YES grows each time NO escapes
     growYes();
 
-    // move NO away
     let newLeft = noBtn.offsetLeft - distanceX * 0.45;
     let newTop  = noBtn.offsetTop - distanceY * 0.45;
 
